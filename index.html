@@ -1,0 +1,3981 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>CasaNova Furni (Single File)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #8b6b4c;
+    --primary-dark: #6d533b;
+    --sidebar-width: 220px;
+    --sidebar-collapsed-width: 0px;
+    --secondary: #3e3e3e;
+    --accent: #a52a2a;
+    --light: #f9f7f4;
+    --white: #ffffff;
+    --gray: #f5f5f5;
+    --dark: #333333;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --radius: 12px;
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--light);
+    color: var(--dark);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+    color: var(--secondary);
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 800;
+}
+
+h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+h3 {
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--secondary);
+    border: 2px solid var(--secondary);
+}
+
+.btn-secondary:hover {
+    background: var(--secondary);
+    color: var(--white);
+}
+
+.btn-large {
+    padding: 15px 35px;
+    font-size: 1.1rem;
+}
+
+.btn-admin {
+    background: #9c27b0;
+    color: white;
+}
+
+.btn-admin:hover {
+    background: #7b1fa2;
+}
+
+.btn-staff {
+    background: #2196f3;
+    color: white;
+}
+
+.btn-staff:hover {
+    background: #1976d2;
+}
+
+/* Header & Navigation */
+:root { --sidebar-width: 220px; }
+
+header {
+    background: var(--white);
+    box-shadow: var(--shadow);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: var(--sidebar-width);
+    z-index: 1000;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 0.75rem;
+    overflow: visible;
+}
+
+/* Ensure logout button sits at the very bottom of the sidebar on wide screens */
+header #logout-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    z-index: 1100;
+}
+
+/* If logout button is used inside the compact sidebar user panel, keep it static there */
+.sidebar-user #logout-btn {
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    bottom: auto !important;
+    width: calc(100% - 24px) !important;
+}
+
+/* Main nav area inside the sidebar */
+nav {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.25rem;
+    padding: 0.5rem 0;
+    height: 100%;
+    overflow: auto;
+}
+
+/* Ensure the header's container uses full sidebar width */
+header .container {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--secondary);
+    text-decoration: none;
+    padding: 0.6rem 16px;
+}
+
+.logo i {
+    color: var(--primary);
+}
+
+/* Logo image styles */
+.logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    display: block;
+    margin-right: 8px;
+}
+
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: 100%;
+    padding: 0.5rem 8px;
+    align-items: stretch;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--secondary);
+    font-weight: 600;
+    transition: var(--transition);
+    position: relative;
+    display: block;
+    padding: 14px 18px;
+    border-radius: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nav-links a:hover {
+    color: var(--primary);
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 10px;
+    left: 14px;
+    width: 0;
+    height: 2px;
+    background: var(--primary);
+    transition: var(--transition);
+}
+
+.nav-links a:hover::after {
+    width: calc(100% - 28px);
+}
+
+/* Make active nav item look like attachment: brown color and underline */
+.nav-links a.active {
+    color: var(--primary);
+    font-weight: 800;
+}
+.nav-links a.active::after { width: calc(100% - 28px); }
+
+/* highlight active link */
+.nav-links a.active {
+    background: rgba(139,107,76,0.08);
+    color: var(--primary);
+}
+
+.nav-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+    margin-top: auto;
+    padding: 10px 8px;
+    width: 100%;
+    justify-content: flex-end;
+    border-top: 1px solid rgba(0,0,0,0.04);
+    background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,0.6));
+}
+
+/* Place logout button fixed near the bottom of the sidebar */
+.nav-actions {
+    position: relative; /* make absolute positioning of children relative to this container */
+    padding-bottom: 96px; /* reserve space at the bottom for the logout button */
+}
+
+.nav-actions > * {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-actions .user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding-left: 12px;
+    justify-content: center;
+}
+
+.nav-actions #user-name { font-size: 0.95rem; font-weight: 700; }
+.nav-actions .user-role { font-size: 0.8rem; padding: 4px 8px; border-radius: 12px; background: var(--primary); color: #fff; margin-top: 2px; }
+
+/* Make cart and logout full-width and centered */
+.nav-actions .cart-icon { justify-content: center; padding: 8px 0; }
+.nav-actions #logout-btn {
+    width: calc(100% - 40px);
+    margin: 0 auto;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20px; /* position it near the bottom where highlighted */
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.cart-icon {
+    position: relative;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--secondary);
+}
+
+/* Shift main app to the right of the sidebar */
+#main-app {
+    margin-left: var(--sidebar-width);
+    transition: margin-left 0.2s ease;
+}
+
+/* Sidebar toggle button (fixed) */
+#sidebar-toggle {
+    position: fixed;
+    top: 14px;
+    left: var(--sidebar-width);
+    transform: translateX(-50%);
+    z-index: 1102;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--white);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    border: none;
+    cursor: pointer;
+    transition: left 0.25s ease, transform 0.25s ease;
+}
+
+/* When sidebar is collapsed hide its content and expand main app */
+body.sidebar-collapsed header {
+    width: var(--sidebar-collapsed-width);
+    overflow: visible;
+}
+
+body.sidebar-collapsed header .container,
+body.sidebar-collapsed header nav,
+body.sidebar-collapsed .nav-links,
+body.sidebar-collapsed .nav-actions {
+    display: none !important;
+}
+
+body.sidebar-collapsed #main-app {
+    margin-left: 0;
+}
+
+/* Move toggle button when collapsed */
+body.sidebar-collapsed #sidebar-toggle {
+    left: 12px;
+}
+
+/* Small visual tweak for the icon rotation */
+#sidebar-toggle i { transition: transform 0.25s ease; }
+body.sidebar-collapsed #sidebar-toggle i { transform: rotate(180deg); }
+
+/* Sidebar user panel styles (left column) */
+.sidebar-user {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 12px;
+    align-items: center;
+    text-align: center;
+}
+.sidebar-user-top {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+}
+.sidebar-user-name {
+    font-weight: 800;
+    color: var(--secondary);
+    font-size: 1rem;
+}
+.my-orders-pill {
+    background: #eee;
+    color: var(--secondary);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-weight: 700;
+    border: none;
+}
+.sidebar-cart { display:flex; justify-content:center; align-items:center; }
+.cart-icon { font-size: 1.6rem; color: var(--secondary); position: relative; }
+.logout-large {
+    margin-top: 6px;
+    width: calc(100% - 24px);
+    border-radius: 28px;
+    padding: 12px 18px;
+    background: transparent;
+    border: 2px solid #222;
+    color: #222;
+    font-weight: 700;
+}
+.logout-large:hover { background: #f6f6f6; }
+
+/* Ensure the original small cart-count stays visible when centered */
+.sidebar-user .cart-count { right: -10px; top: -6px; }
+
+/* Responsive: collapse sidebar to top header on small screens */
+@media (max-width: 800px) {
+    header {
+        position: sticky;
+        height: auto;
+        width: 100%;
+        flex-direction: row;
+        padding: 0.5rem 1rem;
+    }
+
+    nav {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .nav-links {
+        flex-direction: row;
+        gap: 1rem;
+        width: auto;
+        padding: 0;
+        align-items: center;
+    }
+
+    .nav-links a {
+        padding: 0;
+        border-radius: 0;
+    }
+
+    .nav-actions {
+        margin-top: 0;
+        padding: 0;
+        justify-content: flex-end;
+    }
+
+    #main-app {
+        margin-left: 0;
+    }
+
+    /* On small screens header becomes top bar; put logout back into normal flow */
+    header #logout-btn {
+        position: static;
+        transform: none;
+        width: auto;
+        margin: 0;
+    }
+}
+
+.cart-count {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    padding: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: var(--secondary);
+}
+
+.user-role {
+    background: var(--primary);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.user-role.admin {
+    background: #9c27b0;
+}
+
+.user-role.staff {
+    background: #2196f3;
+}
+
+/* Hero Section */
+.hero {
+    padding: 8rem 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('https://i.pinimg.com/1200x/70/9e/64/709e64177aa58f25f77a1037c5e28640.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    text-align: center;
+    color: var(--white);
+}
+
+.hero h1, .hero p {
+    color: var(--white);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero h1 {
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto 2rem;
+}
+
+/* Section Styles */
+.section {
+    padding: 5rem 0;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-header p {
+    max-width: 600px;
+    margin: 0 auto;
+    color: var(--secondary);
+}
+
+/* Contact section: horizontal layout on wide screens, stacked on small screens */
+.contact-content {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+}
+
+.contact-content > div {
+    flex: 1;
+}
+
+@media (max-width: 800px) {
+    .contact-content {
+        flex-direction: column;
+    }
+}
+
+/* Furniture Grid */
+.furniture-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+/* New product card style to match mobile card design */
+.product-card-image {
+    width: 100%;
+    height: 360px;
+    overflow: hidden;
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-card-image .furniture-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.product-card-body {
+    background: var(--white);
+    border-radius: 18px;
+    margin-top: -70px; /* overlap image */
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    position: relative;
+}
+
+.product-card-body .product-link {
+    text-decoration: none;
+}
+
+.product-card-body h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.05rem;
+}
+
+.product-desc {
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+    max-height: 44px;
+    overflow: hidden;
+}
+
+.product-bottom {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.product-bottom .furniture-price {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--secondary);
+}
+
+/* Full-width Add-to-Cart button with a circular toggle on the right (visual only) */
+.product-bottom .add-to-cart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center; /* center the label inside the button */
+    min-width: 160px;
+    padding: 12px 14px;
+    background: var(--primary);
+    color: var(--white);
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* removed the decorative toggle inside the add-to-cart button */
+
+/* Make the card layout more compact on wide screens with multiple columns */
+.furniture-card {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 900px) {
+    .product-card-image { height: 300px; }
+}
+
+@media (max-width: 600px) {
+    .product-card-image { height: 260px; }
+    .product-card-body { margin-top: -56px; padding: 14px; }
+    .product-bottom .add-to-cart { padding: 10px 12px; }
+}
+
+@media (max-width: 600px) {
+    .furniture-image {
+        height: 200px; /* smaller images on small screens */
+    }
+
+    .furniture-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1rem;
+    }
+}
+
+.furniture-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.furniture-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+.furniture-image {
+    width: 100%;
+    height: 320px; /* larger product images */
+    object-fit: cover;
+}
+
+.furniture-content {
+    padding: 1.25rem 1rem 2rem; /* extra bottom padding for overlapping button */
+}
+
+/* Product text consistency */
+.furniture-content h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--secondary);
+    margin-bottom: 0.5rem;
+}
+
+.furniture-content p {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 0.75rem;
+    min-height: 2.2rem; /* keep cards uniform height */
+}
+
+/* Make the product image + name clickable as a single element */
+.product-link {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+}
+
+.product-link:hover {
+    text-decoration: none;
+}
+
+.furniture-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 1rem 0;
+    text-align: center;
+    /* decorative side lines removed */
+}
+
+.furniture-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: -20px; /* lift button up into image area */
+    pointer-events: auto;
+}
+
+/* Allow card to position children relative to it (for more advanced overlap) */
+.furniture-card {
+    position: relative;
+}
+
+/* Slightly raise button more on larger screens */
+@media (min-width: 900px) {
+    .furniture-actions { margin-top: -26px; }
+}
+
+@media (max-width: 600px) {
+    .furniture-actions { margin-top: -12px; }
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--gray);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+/* Add to Cart button styling inside product cards */
+.furniture-actions .add-to-cart {
+    width: auto;
+    padding: 8px 14px;
+    font-size: 0.95rem;
+    border-radius: 10px;
+}
+
+.quantity {
+    font-weight: 600;
+}
+
+/* Admin Panel */
+.admin-panel {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-top: 2rem;
+}
+
+.admin-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--gray);
+    padding-bottom: 1rem;
+}
+
+.admin-tab {
+    padding: 10px 20px;
+    background: var(--gray);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.admin-tab.active {
+    background: var(--primary);
+    color: white;
+}
+
+.admin-content {
+    display: none;
+}
+
+.admin-content.active {
+    display: block;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.admin-table th, .admin-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--gray);
+}
+
+.admin-table th {
+    background: var(--gray);
+    font-weight: 600;
+}
+
+.admin-table tr:hover {
+    background: rgba(139, 107, 76, 0.05);
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-confirmed {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-preparing {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-ready {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.status-completed {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+/* Staff Panel */
+.staff-panel {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-top: 2rem;
+}
+
+/* Cart Sidebar */
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    background: var(--white);
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-sidebar.active {
+    right: 0;
+}
+
+.cart-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--gray);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+}
+
+.cart-footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--gray);
+}
+
+.cart-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--gray);
+}
+
+.cart-item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.cart-item-details {
+    flex: 1;
+}
+
+.cart-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 0.5rem;
+}
+
+.cart-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: var(--shadow);
+    transform: translateY(20px);
+    transition: var(--transition);
+    /* Keep modal content scrollable if it exceeds viewport height */
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.modal.active .modal-content {
+    transform: translateY(0);
+}
+
+/* Track Order Modal Styles */
+.track-steps {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-top: 1rem;
+    flex-wrap: nowrap;
+}
+
+.track-step {
+    flex: 1 1 0;
+    text-align: center;
+    position: relative;
+    padding: 10px 6px;
+}
+
+.track-step .icon {
+    font-size: 1.35rem;
+    display: inline-block;
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+    border-radius: 50%;
+    background: #f5efe9;
+    color: var(--primary);
+    margin: 0 auto 6px;
+    box-shadow: 0 3px 8px rgba(139, 107, 76, 0.12);
+}
+
+.track-step.completed .icon {
+    background: var(--primary);
+    color: #fff;
+}
+
+.track-step .label {
+    font-size: 0.85rem;
+    color: var(--secondary);
+    font-weight: 600;
+}
+
+.track-step::after {
+    content: '';
+    position: absolute;
+    right: -6px;
+    top: 22px;
+    height: 4px;
+    width: 12px;
+    background: linear-gradient(90deg, #e8ddd2 0%, #f5efe9 100%);
+    z-index: 0;
+}
+
+.track-step:last-child::after { display: none; }
+
+.track-progress {
+    margin-top: 1rem;
+    height: 8px;
+    background: #e8ddd2;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.track-progress .bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+    width: 0%;
+    transition: width 0.4s ease;
+}
+
+.track-meta {
+    margin-top: 12px;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+@media (max-width: 600px) {
+    .track-steps { gap: 8px; }
+    .track-step .label { font-size: 0.75rem; }
+    .track-step .icon { width: 36px; height: 36px; line-height: 36px; font-size: 1rem; }
+    .track-steps { overflow-x: auto; }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--secondary);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(139, 107, 76, 0.2);
+}
+
+.role-selector {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.role-option {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border: 2px solid var(--gray);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.role-option.selected {
+    border-color: var(--primary);
+    background: rgba(139, 107, 76, 0.1);
+}
+
+/* Vision & Mission cards for About section */
+.vm-container {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.2rem;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.vm-card {
+    background: linear-gradient(180deg, #fffaf6 0%, #f9f7f4 100%);
+    border: 1px solid rgba(139, 107, 76, 0.08);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(139, 107, 76, 0.06);
+    flex: 1 1 45%;
+    text-align: center;
+}
+
+.vm-card h4 {
+    margin-bottom: 1rem;
+    color: var(--secondary);
+    font-size: 1.5rem;
+}
+
+.vm-card p, .vm-card ul {
+    color: #333;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.vm-card ul {
+    padding-left: 1.1rem;
+    margin-top: 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .vm-container { flex-direction: column; }
+}
+
+/* Footer */
+footer {
+    background: var(--secondary);
+    color: var(--white);
+    padding: 4rem 0 2rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.footer-column h3 {
+    color: var(--white);
+    margin-bottom: 1.5rem;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.footer-links a:hover {
+    color: var(--primary);
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--white);
+    transition: var(--transition);
+}
+
+.social-links a:hover {
+    background: var(--primary);
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+
+    .nav-toggle {
+        display: block;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+}
+
+/* Payment Methods */
+.payment-methods {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Keep radio inputs available for keyboard and screen readers but visually hide them */
+.payment-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.payment-option label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 10px;
+    border: 2px solid var(--gray);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.payment-option input[type="radio"]:checked + label {
+    border-color: var(--primary);
+    background: rgba(139, 107, 76, 0.1);
+}
+
+.payment-option label i {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    color: var(--primary);
+}
+
+.payment-option label {
+    min-height: 64px;
+    justify-content: center;
+}
+
+.payment-details {
+    display: none;
+    margin-top: 12px;
+}
+
+.payment-details.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Login Page Styles - split layout: left pane for form, right pane for background */
+.login-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-start;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.login-split {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.login-left {
+    width: 40%; /* left column size (form) - reduced so right side has more space */
+    min-width: 320px;
+    display: flex;
+    align-items: stretch; /* stretch so container can fill height */
+    justify-content: flex-start;
+    padding: 0; /* padding will be on the container itself */
+    box-sizing: border-box;
+    background: linear-gradient(rgba(255,255,255,0.02), rgba(255,255,255,0));
+}
+
+.login-right {
+    flex: 1; /* right column takes remaining space and shows the image */
+    background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)), url('https://i.pinimg.com/1200x/dd/8a/35/dd8a3510e07dffc487d730360d57711f.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.login-page.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.login-page.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.login-container {
+    background: var(--white);
+    border-radius: 0; /* make full-height look seamless */
+    padding: 2.25rem;
+    max-width: none;
+    width: 100%;
+    box-shadow: var(--shadow);
+    text-align: center;
+    min-height: 100vh; /* fill left column vertically */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: auto;
+}
+
+.login-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--secondary);
+    margin-bottom: 1rem;
+}
+
+.login-logo img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.login-form {
+    margin-bottom: 1.5rem;
+}
+
+.login-form .form-group {
+    margin-bottom: 0.9rem;
+    text-align: left;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.login-form .form-control {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.login-form .form-control:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(139, 107, 76, 0.2);
+}
+
+.login-btn {
+    width: 100%;
+    padding: 8px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 28px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-bottom: 0.8rem;
+}
+
+.login-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+/* Adjust responsive breakpoint: preserve split layout on tablets/large phones;
+   only collapse to single column on very small screens (<=420px) */
+@media (max-width: 420px) {
+    .login-split { flex-direction: column; }
+    .login-left { width: 100%; min-width: 0; }
+    .login-right { display: none; }
+    .login-container { border-radius: 8px; min-height: auto; padding: 1.25rem; }
+}
+
+/* Demo accounts: horizontal layout for login page */
+.demo-accounts {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.demo-accounts p {
+    margin: 0;
+    font-weight: 600;
+    color: var(--secondary);
+    margin-right: 0.5rem;
+    white-space: nowrap;
+}
+
+.demo-btn {
+    padding: 8px 14px;
+    background: transparent;
+    color: var(--secondary);
+    border: 2px solid var(--secondary);
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.demo-btn:hover {
+    background: var(--secondary);
+    color: white;
+}
+
+@media (max-width: 420px) {
+    .demo-accounts { flex-direction: column; gap: 0.5rem; }
+    .demo-accounts p { margin-bottom: 0.25rem; }
+}
+
+.register-link {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--secondary);
+}
+
+.register-link a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+/* Register Page Styles */
+.register-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.register-page.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.register-container {
+    background: var(--white);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    max-width: 450px;
+    width: 94%;
+    box-shadow: var(--shadow);
+    text-align: center;
+    max-height: calc(100vh - 48px);
+    overflow: auto;
+}
+
+.register-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--secondary);
+    margin-bottom: 1rem;
+}
+
+.register-logo img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+
+.register-form {
+    margin-bottom: 1rem;
+}
+
+.register-form .form-group {
+    margin-bottom: 0.9rem;
+    text-align: left;
+}
+
+.register-form label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+    color: var(--secondary);
+    font-size: 0.95rem;
+}
+
+.register-form .form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.register-form .form-control:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(139, 107, 76, 0.2);
+}
+
+
+.register-btn {
+    width: 100%;
+    padding: 10px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-bottom: 0.75rem;
+}
+
+.register-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.login-link {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--secondary);
+}
+
+.login-link a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* Dashboard Styles */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.dashboard-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.dashboard-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-card .value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 1rem 0;
+}
+
+.dashboard-card .description {
+    color: var(--secondary);
+    font-size: 0.9rem;
+}
+
+.order-details {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    margin-top: 1.5rem;
+}
+
+.order-details h3 {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--gray);
+    padding-bottom: 0.5rem;
+}
+
+.order-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-item {
+    margin-bottom: 0.5rem;
+}
+
+.info-item strong {
+    display: inline-block;
+    width: 120px;
+    color: var(--secondary);
+}
+
+.order-items {
+    margin-top: 1rem;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--gray);
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+/* Category Filters */
+.category-filters {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.category-btn {
+    padding: 8px 16px;
+    background: var(--white);
+    border: 2px solid var(--primary);
+    border-radius: 50px;
+    color: var(--primary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.category-btn.active,
+.category-btn:hover {
+    background: var(--primary);
+    color: var(--white);
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- Login Page (Initial View) -->
+    <div class="login-page" id="login-page">
+        <div class="login-split">
+            <div class="login-left">
+                <div class="login-container">
+            <div class="login-logo">
+                <img src="https://i.pinimg.com/736x/dd/02/34/dd0234c4d9682cd3c174ac2f31aa07d0.jpg" alt="CasaNova Furni Logo">
+                <span>CasaNova Furni</span>
+            </div>
+            <h2>Welcome Back</h2>
+            <p>Please login to browse our premium furniture collection</p>
+            
+            <form class="login-form" id="main-login-form">
+                <div class="form-group">
+                    <label for="main-login-email">Email</label>
+                    <input type="email" id="main-login-email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="main-login-password">Password</label>
+                    <input type="password" id="main-login-password" class="form-control" required>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+            
+            <!-- Demo accounts removed -->
+
+            <p class="register-link">
+                Don't have an account? <a href="#" id="show-register">Register here</a>
+            </p>
+                </div>
+            </div>
+            <div class="login-right" aria-hidden="true"></div>
+        </div>
+    </div>
+
+    <!-- Register Page -->
+    <div class="register-page hidden" id="register-page">
+        <div class="login-split">
+            <div class="login-left">
+                <div class="login-container">
+                    <div class="register-logo">
+                        <img src="https://i.pinimg.com/736x/dd/02/34/dd0234c4d9682cd3c174ac2f31aa07d0.jpg" alt="CasaNova Furni Logo">
+                        <span>CasaNova Furni</span>
+                    </div>
+                    <h2>Create an Account</h2>
+                    <p>Join us to explore our premium furniture collection</p>
+
+                    <form class="register-form" id="main-register-form">
+                        <div class="form-group">
+                            <label for="main-register-name">Full Name</label>
+                            <input type="text" id="main-register-name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="main-register-email">Email</label>
+                            <input type="email" id="main-register-email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="main-register-password">Password</label>
+                            <input type="password" id="main-register-password" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="main-register-confirm">Confirm Password</label>
+                            <input type="password" id="main-register-confirm" class="form-control" required>
+                        </div>
+                        <button type="submit" class="register-btn">Create Account</button>
+                    </form>
+
+                    <p class="login-link">
+                        Already have an account? <a href="#" id="show-login">Login here</a>
+                    </p>
+                </div>
+            </div>
+            <div class="login-right" aria-hidden="true"></div>
+        </div>
+    </div>
+
+    <!-- Main Application (Hidden until login) -->
+    <div id="main-app" class="hidden">
+        <!-- Header -->
+        <header>
+            <div class="container">
+                <nav>
+                    <a href="#" class="logo">
+                        <img src="https://i.pinimg.com/736x/dd/02/34/dd0234c4d9682cd3c174ac2f31aa07d0.jpg" alt="CasaNova Furni logo" class="logo-img">
+                        <span>CasaNova Furni</span>
+                    </a>
+
+                    <!-- User panel at top of sidebar -->
+                    <div class="sidebar-user user-info hidden" id="user-info">
+                        <div class="sidebar-user-top">
+                            <div class="sidebar-user-name" id="user-name">User</div>
+                            <div class="user-role" id="user-role">Customer</div>
+                        </div>
+                        <button class="btn my-orders-pill" id="my-orders-btn" style="display:none;">My Orders</button>
+                    </div>
+
+                    <div class="nav-links">
+                        <a href="#home" class="nav-link">Home</a>
+                        <a href="#furniture" class="nav-link">Furniture</a>
+                        <a href="#customer-account-section" id="my-orders-link" class="nav-link">My Orders</a>
+                        <a href="#contact" class="nav-link">Contact</a>
+                    </div>
+
+                    <div class="nav-actions">
+                        <div class="sidebar-cart">
+                            <div class="cart-icon" id="cart-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="cart-count" id="cart-count">0</span>
+                            </div>
+                        </div>
+                        <button class="btn logout-large hidden" id="logout-btn">Logout</button>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Sidebar Toggle Button -->
+        <button id="sidebar-toggle" aria-label="Toggle sidebar">
+            <i class="fas fa-angle-left"></i>
+        </button>
+
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="container">
+                <h1>Crafting Spaces That Tell Your Story</h1>
+                <p>Discover handcrafted furniture that transforms your house into a home</p>
+                <!-- Hero buttons removed per request -->
+            </div>
+        </section>
+
+        <!-- Furniture Section -->
+        <section class="section" id="furniture">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Our Furniture Collection</h2>
+                    <p>Handcrafted pieces that blend beauty and functionality</p>
+                </div>
+                
+                <!-- Category Filters -->
+                <div class="category-filters">
+                    <button class="category-btn active" data-category="all">All</button>
+                    <button class="category-btn" data-category="Bedroom">Bedroom</button>
+                    <button class="category-btn" data-category="Dining">Dining</button>
+                    <button class="category-btn" data-category="Office">Office</button>
+                </div>
+                
+                <div class="furniture-grid" id="furniture-grid">
+                    <!-- Furniture will be dynamically loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Panel (Visible only to Admin) -->
+        <section class="section hidden" id="admin-panel-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Admin Dashboard</h2>
+                    <p>Manage users, products, and orders</p>
+                </div>
+                
+                <!-- Admin Dashboard Stats -->
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Total Users</h3>
+                        <div class="value" id="admin-total-users">0</div>
+                        <p class="description">Registered customers and staff</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Total Orders</h3>
+                        <div class="value" id="admin-total-orders">0</div>
+                        <p class="description">All-time orders placed</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Revenue</h3>
+                        <div class="value" id="admin-total-revenue">₱0</div>
+                        <p class="description">Total sales revenue</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Pending Orders</h3>
+                        <div class="value" id="admin-pending-orders">0</div>
+                        <p class="description">Orders awaiting processing</p>
+                    </div>
+                </div>
+                
+                <div class="admin-panel">
+                    <div class="admin-tabs">
+                        <button class="admin-tab active" data-tab="users">Users</button>
+                        <button class="admin-tab" data-tab="products">Product Management</button>
+                        <button class="admin-tab" data-tab="orders">Orders</button>
+                        <button class="admin-tab" data-tab="customers">Customer Details</button>
+                    </div>
+                    
+                    <div class="admin-content active" id="users-tab">
+                        <h3>User Management</h3>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Registration Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <!-- Users will be dynamically loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="admin-content" id="products-tab">
+                        <h3>Product Management</h3>
+                        <button class="btn btn-primary" id="add-product-btn">Add New Product</button>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table-body">
+                                <!-- Products will be dynamically loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="admin-content" id="orders-tab">
+                        <h3>Order Management</h3>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Items</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-table-body">
+                                <!-- Orders will be dynamically loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="admin-content" id="customers-tab">
+                        <h3>Customer Details</h3>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Total Orders</th>
+                                    <th>Total Spent</th>
+                                    <th>Last Order</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customers-table-body">
+                                <!-- Customer details will be dynamically loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Staff Panel (Visible only to Staff) -->
+        <section class="section hidden" id="staff-panel-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Staff Dashboard</h2>
+                    <p>Manage orders and update order status</p>
+                </div>
+                
+                <!-- Staff Dashboard Stats -->
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Today's Orders</h3>
+                        <div class="value" id="staff-today-orders">0</div>
+                        <p class="description">Orders placed today</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Pending Orders</h3>
+                        <div class="value" id="staff-pending-orders">0</div>
+                        <p class="description">Orders awaiting processing</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Preparing</h3>
+                        <div class="value" id="staff-preparing-orders">0</div>
+                        <p class="description">Orders being prepared</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Ready for Delivery</h3>
+                        <div class="value" id="staff-ready-orders">0</div>
+                        <p class="description">Orders ready for delivery</p>
+                    </div>
+                </div>
+                
+                <div class="staff-panel">
+                    <h3>Recent Orders</h3>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="staff-orders-table-body">
+                            <!-- Orders for staff will be dynamically loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Customer Account / Order History (Visible to logged-in Customers) -->
+        <section class="section hidden" id="customer-account-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>My Account</h2>
+                    <p>Your profile and order history</p>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <h3 id="account-welcome">Welcome, <span id="account-user-name">Customer</span></h3>
+                    <p id="account-user-email" style="color: var(--secondary)"></p>
+                </div>
+
+                <div class="section-header" style="margin-top: 1rem;">
+                    <h3>Order History</h3>
+                    <p>Past orders you placed with CasaNova Furni</p>
+                </div>
+                <div class="orders-history">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="order-history-table-body">
+                            <!-- Customer orders will be rendered here -->
+                        </tbody>
+                    </table>
+                    <p id="no-orders-msg" style="display:none; margin-top: 1rem;">You have no orders yet.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="section about" id="about">
+            <div class="container">
+                <div class="about-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+                    <div class="about-text">
+                        <h2>Our Story</h2>
+                        <p>CasaNova Furni began with a simple passion: creating beautiful, functional furniture that stands the test of time. Our founder, Thomas Woodcraft, started in a small workshop, handcrafting each piece with attention to detail and quality.</p>
+                        <p>Today, we continue Thomas's tradition of excellence, combining traditional woodworking techniques with modern design to create furniture that becomes the centerpiece of your home.</p>
+                        <p>Every piece in our collection is crafted from sustainably sourced materials, ensuring both beauty and responsibility in every creation.</p>
+                        <a href="#contact" class="btn btn-primary">Visit Our Showroom</a>
+                    </div>
+                    <div class="about-image">
+                        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Carpenter at work" style="width: 100%; border-radius: var(--radius);">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vision & Mission Section -->
+        <section class="section" id="vision-mission">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Our Vision & Mission</h2>
+                    <p>Guiding principles that drive our passion for craftsmanship</p>
+                </div>
+                <div class="vm-container">
+                    <div class="vm-card">
+                        <h4>Our Vision</h4>
+                        <p>To become the most trusted name in handcrafted furniture, known for creating spaces that inspire, comfort, and reflect the unique personality of each homeowner. We envision homes filled with pieces that tell stories and create lasting memories.</p>
+                    </div>
+                    <div class="vm-card">
+                        <h4>Our Mission</h4>
+                        <p>To craft exceptional furniture using sustainable materials, traditional techniques, and innovative designs that enhance everyday living. We are committed to quality craftsmanship, environmental responsibility, and creating pieces that become family heirlooms.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="section" id="contact">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Visit Our Showroom</h2>
+                    <p>Experience our furniture in person and speak with our design consultants!</p>
+                </div>
+                <div class="contact-content">
+                    <div>
+                        <h3>Location & Hours</h3>
+                        <p><i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> 123 Design District, Furniture City</p>
+                        <p><i class="fas fa-phone" style="margin-right: 10px;"></i> (555) 123-4567</p>
+                        <p><i class="fas fa-envelope" style="margin-right: 10px;"></i> hello@woodcrafthaven.com</p>
+                        <br>
+                        <p><strong>Hours:</strong></p>
+                        <p>Monday - Friday: 9am - 7pm</p>
+                        <p>Saturday: 10am - 6pm</p>
+                        <p>Sunday: 11am - 5pm</p>
+                    </div>
+                    <div>
+                        <h3>Send Us a Message</h3>
+                        <form id="contact-form">
+                            <div class="form-group">
+                                <label for="contact-name">Name</label>
+                                <input type="text" id="contact-name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-email">Email</label>
+                                <input type="email" id="contact-email" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-message">Message</label>
+                                <textarea id="contact-message" class="form-control" rows="4" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-column">
+                        <h3>CasaNova Furni</h3>
+                        <p>Handcrafted furniture made with love and the finest materials. Perfect for creating your dream home!</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-pinterest"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Quick Links</h3>
+                        <ul class="footer-links">
+                            <li><a href="#home">Home</a></li>
+                            <li><a href="#furniture">Furniture</a></li>
+                            <li><a href="#about">About Us</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>Contact Info</h3>
+                        <ul class="footer-links">
+                            <li><i class="fas fa-map-marker-alt"></i> 123 Design District, Furniture City</li>
+                            <li><i class="fas fa-phone"></i> (555) 123-4567</li>
+                            <li><i class="fas fa-envelope"></i> hello@woodcrafthaven.com</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2023 CasaNova Furni Furniture. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Cart Sidebar -->
+        <aside id="cart-sidebar" class="cart-sidebar">
+            <div class="cart-header">
+                <h3>Your Cart</h3>
+                <button id="close-cart" class="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="cart-body" id="cart-body">
+                <p>Your cart is empty</p>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">Total: <span id="cart-total-amount">₱0.00</span></div>
+                <button class="btn btn-primary" id="checkout-btn" style="width: 100%;" disabled>Proceed to Checkout</button>
+            </div>
+        </aside>
+
+        <!-- Payment Modal -->
+        <div class="modal" id="payment-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Complete Your Order</h3>
+                    <button class="close-modal" id="close-payment">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="order-summary" style="margin-bottom: 1.5rem;">
+                    <h4>Order Summary</h4>
+                    <div id="order-items-list" style="margin: 1rem 0;">
+                        <!-- Order items will be dynamically loaded here -->
+                    </div>
+                    <div class="shipping-fee" style="display: flex; justify-content: space-between; margin: 0.5rem 0; padding: 0.5rem 0; border-top: 1px solid var(--gray);">
+                        <span>Shipping Fee:</span>
+                        <span>₱250.00</span>
+                    </div>
+                    <div class="cart-total">Total (with shipping): <span id="payment-total-amount">₱0.00</span></div>
+                </div>
+                <form id="payment-form">
+                    <div class="form-group">
+                        <label for="customer-name">Your Name</label>
+                        <input type="text" id="customer-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-phone">Phone Number</label>
+                        <input type="tel" id="customer-phone" class="form-control" required placeholder="0912 345 6789">
+                    </div>
+                    <div class="form-group">
+                        <label for="delivery-address">Delivery Address</label>
+                        <textarea id="delivery-address" class="form-control" rows="3" required placeholder="Enter your complete delivery address"></textarea>
+                    </div>
+                   
+                    <div class="form-group">
+                        <label for="payment-method">Payment Method</label>
+                        <div class="payment-methods">
+                            <div class="payment-option">
+                                <input type="radio" id="gcash" name="payment-method" value="gcash" checked>
+                                <label for="gcash">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    <span>GCash</span>
+                                </label>
+                            </div>
+                            <div class="payment-option">
+                                <input type="radio" id="credit-card" name="payment-method" value="credit_card">
+                                <label for="credit-card">
+                                    <i class="fas fa-credit-card"></i>
+                                    <span>Credit Card</span>
+                                </label>
+                            </div>
+                            <div class="payment-option">
+                                <input type="radio" id="cod" name="payment-method" value="cash_on_delivery">
+                                <label for="cod">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <span>Cash on Delivery</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GCash Details -->
+                    <div id="gcash-details" class="payment-details active">
+                        <div class="form-group">
+                            <label for="gcash-number">GCash Mobile Number</label>
+                            <input type="text" id="gcash-number" class="form-control" placeholder="0912 345 6789">
+                        </div>
+                        <div class="form-group">
+                            <label for="gcash-name">Account Name</label>
+                            <input type="text" id="gcash-name" class="form-control" placeholder="Juan Dela Cruz">
+                        </div>
+                    </div>
+
+                    <!-- Credit Card Details -->
+                    <div id="credit-card-details" class="payment-details">
+                        <div class="form-group">
+                            <label for="card-number">Card Number</label>
+                            <input type="text" id="card-number" class="form-control" placeholder="1234 5678 9012 3456">
+                        </div>
+                        <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div>
+                                <label for="expiry-date">Expiry Date</label>
+                                <input type="text" id="expiry-date" class="form-control" placeholder="MM/YY">
+                            </div>
+                            <div>
+                                <label for="cvv">CVV</label>
+                                <input type="text" id="cvv" class="form-control" placeholder="123">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="card-name">Name on Card</label>
+                            <input type="text" id="card-name" class="form-control" placeholder="Juan Dela Cruz">
+                        </div>
+                    </div>
+
+                    <!-- Cash on Delivery Details -->
+                    <div id="cod-details" class="payment-details">
+                        <div style="background: var(--light); padding: 15px; border-radius: var(--radius);">
+                            <p><strong>Cash on Delivery Instructions:</strong></p>
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                                <li>Pay when your order arrives</li>
+                                <li>Have exact amount ready</li>
+                                <li>Our delivery person will provide official receipt</li>
+                                <li>Delivery within 3-5 business days</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label" style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" id="terms-agreement" required>
+                            I agree to the <a href="#" onclick="showTerms()">terms and conditions</a>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-lock"></i> Place Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Product Modal -->
+        <div class="modal" id="product-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="product-modal-title">Product Details</h3>
+                    <button class="close-modal" id="close-product-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="product-modal-body" style="margin-top:1rem;">
+                    <!-- Filled dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Confirmation Modal -->
+        <div class="modal" id="order-confirmation-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Order Confirmed! 🎉</h3>
+                    <button class="close-modal" id="close-confirmation">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div style="text-align: center; padding: 1rem 0;">
+                    <div style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h4>Thank you for your order!</h4>
+                    <div style="background: var(--light); padding: 1.5rem; border-radius: var(--radius); margin: 1.5rem 0; text-align: left;">
+                        <p><strong>Order #:</strong> <span id="confirmed-order-id"></span></p>
+                        <p><strong>Subtotal:</strong> <span id="confirmed-order-subtotal"></span></p>
+                        <p><strong>Shipping Fee:</strong> ₱250.00</p>
+                        <p style="border-top: 1px solid var(--gray); margin-top: 0.5rem; padding-top: 0.5rem;"></p>
+                        <p style="border-top: 1px solid var(--gray); margin-top: 0.5rem; padding-top: 0.5rem;"><strong>Total Amount:</strong> <span id="confirmed-order-total"></span></p>
+                        <p><strong>Payment Method:</strong> <span id="confirmed-payment-method"></span></p>
+                        <p><strong>Estimated Delivery:</strong> 3-5 business days</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button class="btn btn-primary" onclick="closeOrderConfirmation()">
+                            Continue Shopping
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Track Order Modal -->
+        <div class="modal" id="track-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Track Your Order</h3>
+                    <button class="close-modal" id="close-track">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form id="track-form">
+                    <div class="form-group">
+                        <label for="track-id">Order ID or Tracking Number</label>
+                        <input type="text" id="track-id" class="form-control" placeholder="#1001 or 1001" required>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <button type="submit" class="btn btn-primary">Check Status</button>
+                        <button type="button" class="btn btn-secondary" id="clear-track">Clear</button>
+                    </div>
+                </form>
+
+                <div id="track-result" style="margin-top:1.2rem; display:none;">
+                    <div class="track-steps" id="track-steps"></div>
+                    <div class="track-progress" style="margin-top:12px;">
+                        <div class="bar" id="track-progress-bar"></div>
+                    </div>
+                    <div class="track-meta" id="track-meta"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay -->
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script>
+// Application Data
+const furniture = [
+    // Bedroom (6)
+    { id: 7, name: "Solid King Bed Frame", description: "King-size bed frame with slatted support and elegant headboard.", price: 2999.00, image: "https://i.pinimg.com/1200x/26/48/4a/26484aeb54fd8c9102a1b818f0cfcbc4.jpg", category: "Bedroom", available: true },
+    { id: 8, name: "6-Drawer Dresser", description: "Spacious dresser with soft-close drawers and dovetail joints.", price: 899.00, image: "https://i.pinimg.com/1200x/85/d1/18/85d118187d2d97424d3c1639802b5214.jpg", category: "Bedroom", available: true },
+    { id: 9, name: "Wardrobe Armoire", description: "Freestanding wardrobe with hanging rail and adjustable shelving.", price: 1299.00, image: "https://i.pinimg.com/736x/d0/8b/d7/d08bd728b22ebea8135295b4285d1b9c.jpg", category: "Bedroom", available: true },
+    { id: 10, name: "Bedside Nightstand", description: "Compact nightstand with one drawer and lower shelf.", price: 249.00, image: "https://i.pinimg.com/1200x/75/5c/9a/755c9a4628cfcc0aca7eb4e764e37c97.jpg", category: "Bedroom", available: true },
+    { id: 11, name: "Mattress (Medium-Firm)", description: "Hybrid mattress with pocket springs and memory foam comfort layer.", price: 1499.00, image: "https://i.pinimg.com/736x/70/49/04/7049047ce28e26c5820058b4e0cc0af6.jpg", category: "Bedroom", available: true },
+    { id: 12, name: "Vanity Table", description: "Elegant vanity table with mirror and drawer storage.", price: 659.00, image: "https://i.pinimg.com/736x/34/30/16/34301687bd2da63059b0cb405f8a8bfb.jpg", category: "Bedroom", available: true },
+
+    // Dining (6)
+    { id: 13, name: "8-Seater Dining Table", description: "Solid wood dining table with seating for eight and durable finish.", price: 3499.00, image: "https://i.pinimg.com/1200x/73/2b/9e/732b9ebdcd9b4c6d80841befd05c4323.jpg", category: "Dining", available: true },
+    { id: 14, name: "Dining Chair (Set of 4)", description: "Set of four upholstered dining chairs with ergonomic back support.", price: 799.00, image: "https://i.pinimg.com/1200x/73/e7/a6/73e7a65e6ed6d7595fcbe7f6e8ac6960.jpg", category: "Dining", available: true },
+    { id: 15, name: "Extendable Table", description: "Space-saving extendable dining table for flexible dining configurations.", price: 1799.00, image: "https://i.pinimg.com/1200x/d1/7a/81/d17a8151d9f30ed1c4313c8b7f71ca5c.jpg", category: "Dining", available: true },
+    { id: 16, name: "Sideboard Buffet", description: "Storage sideboard with cabinet doors and soft-close hardware.", price: 1099.00, image: "https://i.pinimg.com/736x/e0/ef/af/e0efafd18553b9ddc0bc2307554918d8.jpg", category: "Dining", available: true },
+    { id: 17, name: "Bar Cart", description: "Mobile bar cart with two tiers and brass-finish accents.", price: 459.00, image: "https://i.pinimg.com/1200x/81/76/df/8176df204780c07c098cf799f54c7257.jpg", category: "Dining", available: true },
+    { id: 18, name: "Dining Bench", description: "Upholstered dining bench for casual seating and additional capacity.", price: 399.00, image: "https://i.pinimg.com/1200x/23/24/0d/23240dc5b880f879653ec7fab978a276.jpg", category: "Dining", available: true },
+
+    // Office (6)
+    { id: 19, name: "Executive Desk (Large)", description: "Large executive desk with cable grommets and integrated storage.", price: 1799.00, image: "https://i.pinimg.com/1200x/0a/f8/51/0af851c603c314ca24c0098c5fba755f.jpg", category: "Office", available: true },
+    { id: 20, name: "Ergonomic Office Chair", description: "Adjustable ergonomic chair with mesh back and lumbar support.", price: 999.00, image: "https://i.pinimg.com/736x/5d/f1/2a/5df12a4b91db0fe9380537f309e33de8.jpg", category: "Office", available: true },
+    { id: 21, name: "2-Drawer Filing Cabinet", description: "Lockable filing cabinet with smooth metal drawer slides.", price: 499.00, image: "https://i.pinimg.com/736x/ac/13/7e/ac137e10b08642135f5936f7cdd99167.jpg", category: "Office", available: true },
+    { id: 22, name: "Open Bookshelf", description: "Four-shelf open bookshelf for office storage and display.", price: 599.00, image: "https://i.pinimg.com/736x/fc/42/ea/fc42ea1a3953ef48850afaae35ccc7bf.jpg", category: "Office", available: true },
+    { id: 23, name: "Monitor Stand", description: "Adjustable monitor stand with built-in drawer for desk organization.", price: 199.00, image: "https://i.pinimg.com/736x/be/03/27/be0327c69839978b55a6d6b766efbe96.jpg", category: "Office", available: true },
+    { id: 24, name: "Task Lamp", description: "LED task lamp with adjustable arm and touch controls.", price: 129.00, image: "https://i.pinimg.com/1200x/5c/a6/2c/5ca62cbba13199a770b70ba7c9e0225e.jpg", category: "Office", available: true }
+];
+
+// Sample users with hashed passwords (in a real app, passwords would be properly hashed on the server)
+const users = [
+    { id: 1, name: "Admin User", email: "admin@woodcrafthaven.com", password: "admin123", role: "admin", registered: "2023-01-01" },
+    { id: 2, name: "Staff Member", email: "staff@woodcrafthaven.com", password: "staff123", role: "staff", registered: "2023-02-01" },
+    { id: 3, name: "John Customer", email: "customer@example.com", password: "customer123", role: "customer", registered: "2023-03-01" }
+];
+
+// Orders storage
+let orders = [];
+let userOrders = {};
+
+// Application State
+let cart = [];
+let currentUser = null;
+let nextOrderId = 1001;
+let currentCategory = 'all';
+
+// DOM Elements
+const loginPage = document.getElementById('login-page');
+const registerPage = document.getElementById('register-page');
+const mainApp = document.getElementById('main-app');
+const mainLoginForm = document.getElementById('main-login-form');
+const mainRegisterForm = document.getElementById('main-register-form');
+const showRegister = document.getElementById('show-register');
+const showLogin = document.getElementById('show-login');
+
+
+const furnitureGrid = document.getElementById('furniture-grid');
+const cartIcon = document.getElementById('cart-icon');
+const cartSidebar = document.getElementById('cart-sidebar');
+const cartBody = document.getElementById('cart-body');
+const cartTotalAmount = document.getElementById('cart-total-amount');
+const cartCount = document.getElementById('cart-count');
+const checkoutBtn = document.getElementById('checkout-btn');
+const closeCart = document.getElementById('close-cart');
+const logoutBtn = document.getElementById('logout-btn');
+const paymentModal = document.getElementById('payment-modal');
+const orderConfirmationModal = document.getElementById('order-confirmation-modal');
+const productModal = document.getElementById('product-modal');
+const closePayment = document.getElementById('close-payment');
+const closeConfirmation = document.getElementById('close-confirmation');
+const paymentForm = document.getElementById('payment-form');
+const overlay = document.getElementById('overlay');
+const userInfo = document.getElementById('user-info');
+const userName = document.getElementById('user-name');
+const userRole = document.getElementById('user-role');
+const adminPanelSection = document.getElementById('admin-panel-section');
+const staffPanelSection = document.getElementById('staff-panel-section');
+const myOrdersBtn = document.getElementById('my-orders-btn');
+const customerAccountSection = document.getElementById('customer-account-section');
+const furnitureSection = document.getElementById('furniture');
+const aboutSection = document.getElementById('about');
+const visionMissionSection = document.getElementById('vision-mission');
+const contactSection = document.getElementById('contact');
+const heroSection = document.getElementById('home');
+const navLinks = document.querySelector('.nav-links');
+const publicNavLinks = navLinks ? navLinks.querySelectorAll('a[href="#about"], a[href="#contact"]') : [];
+const homeLink = document.querySelector('a[href="#home"]');
+const furnitureLink = document.querySelector('a[href="#furniture"]');
+const heroButtons = document.querySelector('.hero-buttons');
+const trackOrderBtn = document.getElementById('track-order-btn');
+const paymentMethods = document.querySelectorAll('input[name="payment-method"]');
+const categoryFilters = document.querySelectorAll('.category-btn');
+
+// Dashboard elements
+const adminTotalUsers = document.getElementById('admin-total-users');
+const adminTotalOrders = document.getElementById('admin-total-orders');
+const adminTotalRevenue = document.getElementById('admin-total-revenue');
+const adminPendingOrders = document.getElementById('admin-pending-orders');
+const staffTodayOrders = document.getElementById('staff-today-orders');
+const staffPendingOrders = document.getElementById('staff-pending-orders');
+const staffPreparingOrders = document.getElementById('staff-preparing-orders');
+const staffReadyOrders = document.getElementById('staff-ready-orders');
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', function() {
+    // Load data from localStorage
+    loadDataFromLocalStorage();
+    // Ensure a default admin account exists for CasaNova Furni
+    ensureAdminAccount();
+    
+    // Check if user is already logged in
+    checkAuthStatus();
+    
+    // If user is logged in, show main app, otherwise show login page
+    if (currentUser) {
+        showMainApp();
+    } else {
+        showLoginPage();
+    }
+   
+    // Render initial UI
+    renderFurniture();
+    updateCartUI();
+    setupAdminTabs();
+    renderUsersTable();
+    renderProductsTable();
+    renderOrdersTable();
+    renderStaffOrdersTable();
+    renderCustomersTable();
+    updateDashboardStats();
+
+    // Add event listeners
+    mainLoginForm.addEventListener('submit', handleMainLogin);
+    mainRegisterForm.addEventListener('submit', handleMainRegister);
+    showRegister.addEventListener('click', function(e) {
+        e.preventDefault();
+        showRegisterPage();
+    });
+    showLogin.addEventListener('click', function(e) {
+        e.preventDefault();
+        showLoginPage();
+    });
+    
+    
+    
+    cartIcon.addEventListener('click', toggleCart);
+    closeCart.addEventListener('click', toggleCart);
+    overlay.addEventListener('click', closeAllModals);
+    logoutBtn.addEventListener('click', logout);
+    closePayment.addEventListener('click', () => closeModal(paymentModal));
+    closeConfirmation.addEventListener('click', closeOrderConfirmation);
+    checkoutBtn.addEventListener('click', openPaymentModal);
+    paymentForm.addEventListener('submit', processPayment);
+   
+    // Payment method change handler
+    paymentMethods.forEach(method => {
+        method.addEventListener('change', function() {
+            updatePaymentDetails(this.value);
+        });
+    });
+
+    // Category filter buttons
+    categoryFilters.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from all buttons
+            categoryFilters.forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked button
+            this.classList.add('active');
+            // Update current category and re-render furniture
+            currentCategory = this.getAttribute('data-category');
+            renderFurniture();
+        });
+    });
+
+    // My Orders button - open Customer Account / Order History
+    if (myOrdersBtn) {
+        myOrdersBtn.addEventListener('click', function() {
+            // if the section exists, scroll to it and ensure it's visible
+            if (customerAccountSection) {
+                // ensure the section is shown
+                customerAccountSection.classList.remove('hidden');
+                // scroll into view
+                customerAccountSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // render latest orders
+                renderOrderHistory();
+            }
+        });
+    }
+
+    // Contact form
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Thank you for your message! We will get back to you soon.');
+        this.reset();
+    });
+
+    // Add smooth scrolling for Vision & Mission button
+    document.querySelector('a[href="#vision-mission"]').addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetElement = document.getElementById('vision-mission');
+        if (targetElement) {
+            window.scrollTo({
+                top: targetElement.offsetTop - 100,
+                behavior: 'smooth'
+            });
+        }
+    });
+    
+    // Wire up the new My Orders nav link to show customer account/orders
+    const myOrdersLink = document.getElementById('my-orders-link');
+    if (myOrdersLink) {
+        myOrdersLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (customerAccountSection) {
+                customerAccountSection.classList.remove('hidden');
+                renderOrderHistory();
+                customerAccountSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            // set active class on nav links
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            this.classList.add('active');
+        });
+    }
+
+    // Make nav links set active state when clicked (simple behaviour)
+    document.querySelectorAll('.nav-links a').forEach(a => {
+        a.addEventListener('click', function() {
+            document.querySelectorAll('.nav-links a').forEach(x => x.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+    // Render order history (if any) for current user on load
+    if (typeof renderOrderHistory === 'function') renderOrderHistory();
+});
+
+// Ensure the default admin account exists (creates and persists if missing)
+function ensureAdminAccount() {
+    try {
+        const adminEmail = 'casanovafurniture@gmail.com';
+        const exists = users.some(u => u.email && u.email.toLowerCase() === adminEmail.toLowerCase());
+        if (!exists) {
+            const maxId = users.reduce((m, u) => Math.max(m, u.id || 0), 0);
+            const newUser = {
+                id: maxId + 1,
+                name: 'CasaNova Admin',
+                email: adminEmail,
+                password: 'admin123',
+                role: 'admin',
+                registered: new Date().toISOString().split('T')[0]
+            };
+            users.push(newUser);
+            saveDataToLocalStorage();
+            console.info('Created default admin account:', adminEmail);
+        }
+    } catch (e) {
+        console.warn('Failed to ensure admin account:', e);
+    }
+}
+
+// Show login page
+function showLoginPage() {
+    loginPage.classList.remove('hidden');
+    registerPage.classList.add('hidden');
+    mainApp.classList.add('hidden');
+}
+
+// Show register page
+function showRegisterPage() {
+    loginPage.classList.add('hidden');
+    registerPage.classList.remove('hidden');
+    mainApp.classList.add('hidden');
+}
+
+// Show main application
+function showMainApp() {
+    loginPage.classList.add('hidden');
+    registerPage.classList.add('hidden');
+    mainApp.classList.remove('hidden');
+}
+
+// Handle login from the main login page
+function handleMainLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('main-login-email').value;
+    const password = document.getElementById('main-login-password').value;
+   
+    const user = users.find(u => u.email === email && u.password === password);
+    if (user) {
+        currentUser = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role
+        };
+       
+        // Store auth token and user data in localStorage
+        localStorage.setItem('authToken', 'mock-jwt-token');
+        localStorage.setItem('userData', JSON.stringify(currentUser));
+
+        updateAuthUI();
+        showMainApp();
+        showNotification('Login successful!');
+        mainLoginForm.reset();
+    } else {
+        showNotification('Invalid email or password', 'error');
+    }
+}
+
+// Handle registration from the main register page
+function handleMainRegister(e) {
+    e.preventDefault();
+    const name = document.getElementById('main-register-name').value;
+    const email = document.getElementById('main-register-email').value;
+    const password = document.getElementById('main-register-password').value;
+    const confirm = document.getElementById('main-register-confirm').value;
+   
+    if (password !== confirm) {
+        showNotification('Passwords do not match', 'error');
+        return;
+    }
+   
+    // Check if user already exists
+    if (users.find(u => u.email === email)) {
+        showNotification('User with this email already exists', 'error');
+        return;
+    }
+   
+    // Create new user
+    const newUser = {
+        id: users.length + 1,
+        name: name,
+        email: email,
+        password: password,
+        role: 'customer',
+        registered: new Date().toISOString().split('T')[0]
+    };
+   
+    users.push(newUser);
+    currentUser = {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        role: newUser.role
+    };
+       
+    // Store auth token and user data in localStorage
+    localStorage.setItem('authToken', 'mock-jwt-token');
+    localStorage.setItem('userData', JSON.stringify(currentUser));
+       
+    updateAuthUI();
+    showMainApp();
+    showNotification('Registration successful!');
+    mainRegisterForm.reset();
+    saveDataToLocalStorage();
+}
+
+// Render furniture to the page
+function renderFurniture() {
+    // Filter furniture based on selected category
+    const filteredFurniture = currentCategory === 'all'
+        ? furniture
+        : furniture.filter(item => item.category === currentCategory);
+
+    furnitureGrid.innerHTML = filteredFurniture.map(item => `
+        <div class="furniture-card">
+            <div class="product-card-image">
+                <img src="${item.image}" alt="${item.name}" class="furniture-image">
+            </div>
+            <div class="product-card-body">
+                <a href="#" class="product-link" data-id="${item.id}"><h3>${item.name}</h3></a>
+                <p class="product-desc">${item.description}</p>
+                <div class="product-bottom">
+                    <div class="furniture-price">₱${item.price.toFixed(2)}</div>
+                    <button class="btn add-to-cart" data-id="${item.id}">
+                        <span>Add to Cart</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+
+    // Add event listeners to the dynamically created buttons
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', function() {
+            const furnitureId = parseInt(this.getAttribute('data-id'));
+            // Always add quantity of 1 to cart
+            addToCart(furnitureId, 1);
+        });
+    });
+
+    // Open product modal when image or name is clicked
+    document.querySelectorAll('.product-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const id = parseInt(this.getAttribute('data-id'));
+            openProductModal(id);
+        });
+    });
+}
+
+// Cart functions
+function addToCart(furnitureId, quantity) {
+    quantity = Math.max(1, parseInt(quantity) || 1);
+    const furnitureItem = furniture.find(c => c.id === furnitureId);
+    if (!furnitureItem) return;
+   
+    const existingItem = cart.find(item => item.id === furnitureId);
+   
+    if (existingItem) {
+        existingItem.quantity += quantity;
+    } else {
+        cart.push({
+            id: furnitureItem.id,
+            name: furnitureItem.name,
+            price: furnitureItem.price,
+            image: furnitureItem.image,
+            quantity: quantity
+        });
+    }
+   
+    updateCartUI();
+    showNotification(`${furnitureItem.name} added to cart!`);
+    saveDataToLocalStorage();
+}
+
+function removeFromCart(furnitureId) {
+    cart = cart.filter(item => item.id !== furnitureId);
+    updateCartUI();
+    saveDataToLocalStorage();
+}
+
+function updateCartItemQuantity(furnitureId, change) {
+    const item = cart.find(item => item.id === furnitureId);
+    if (item) {
+        item.quantity += change;
+        if (item.quantity <= 0) {
+            removeFromCart(furnitureId);
+        } else {
+            updateCartUI();
+            saveDataToLocalStorage();
+        }
+    }
+}
+
+function updateCartUI() {
+    // Update cart count
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCount.textContent = totalItems;
+   
+    // Update cart body
+    if (cart.length === 0) {
+        cartBody.innerHTML = '<p>Your cart is empty</p>';
+        checkoutBtn.disabled = true;
+    } else {
+        cartBody.innerHTML = cart.map(item => `
+            <div class="cart-item">
+                <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                <div class="cart-item-details">
+                    <h4>${item.name}</h4>
+                    <p>₱${item.price.toFixed(2)}</p>
+                    <div class="cart-item-actions">
+                        <button class="quantity-btn minus" data-id="${item.id}">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="quantity-btn plus" data-id="${item.id}">+</button>
+                        <button class="btn btn-link remove" data-id="${item.id}">Remove</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+       
+        checkoutBtn.disabled = false;
+       
+        // Add event listeners to cart item buttons
+        cartBody.querySelectorAll('.quantity-btn.plus').forEach(button => {
+            button.addEventListener('click', function() {
+                const furnitureId = parseInt(this.getAttribute('data-id'));
+                updateCartItemQuantity(furnitureId, 1);
+            });
+        });
+       
+        cartBody.querySelectorAll('.quantity-btn.minus').forEach(button => {
+            button.addEventListener('click', function() {
+                const furnitureId = parseInt(this.getAttribute('data-id'));
+                updateCartItemQuantity(furnitureId, -1);
+            });
+        });
+       
+        cartBody.querySelectorAll('.remove').forEach(button => {
+            button.addEventListener('click', function() {
+                const furnitureId = parseInt(this.getAttribute('data-id'));
+                removeFromCart(furnitureId);
+            });
+        });
+    }
+   
+    // Update total
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    cartTotalAmount.textContent = `₱${total.toFixed(2)}`;
+}
+
+function toggleCart() {
+    cartSidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
+}
+
+// Authentication functions
+function checkAuthStatus() {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (userData) {
+            currentUser = userData;
+            updateAuthUI();
+        }
+    }
+}
+
+function logout() {
+    currentUser = null;
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
+    updateAuthUI();
+    showNotification('Logged out successfully');
+    showLoginPage();
+}
+
+function updateAuthUI() {
+    if (currentUser) {
+        logoutBtn.classList.remove('hidden');
+        userInfo.classList.remove('hidden');
+       
+        userName.textContent = currentUser.name;
+        userRole.textContent = currentUser.role;
+        userRole.className = 'user-role ' + currentUser.role;
+       
+        // Show/hide admin and staff panels based on role
+        if (currentUser.role === 'admin') {
+            adminPanelSection.classList.remove('hidden');
+            staffPanelSection.classList.add('hidden');
+            // hide customer account section for admin
+            if (customerAccountSection) customerAccountSection.classList.add('hidden');
+            if (myOrdersBtn) myOrdersBtn.style.display = 'none';
+            // hide public menu and cart for admin/staff
+            if (furnitureSection) furnitureSection.classList.add('hidden');
+            if (cartIcon) cartIcon.classList.add('hidden');
+            if (furnitureGrid) furnitureGrid.innerHTML = '';
+            // hide hero action buttons for admin
+            if (heroButtons) heroButtons.style.display = 'none';
+            // hide about/contact sections for admin
+            if (aboutSection) aboutSection.classList.add('hidden');
+            if (visionMissionSection) visionMissionSection.classList.add('hidden');
+            if (contactSection) contactSection.classList.add('hidden');
+            // hide top navigation links (Home, Menu, About, Contact) for admin
+            if (homeLink) homeLink.style.display = 'none';
+            if (furnitureLink) furnitureLink.style.display = 'none';
+            if (publicNavLinks) publicNavLinks.forEach(link => link.style.display = 'none');
+        } else if (currentUser.role === 'staff') {
+            adminPanelSection.classList.add('hidden');
+            staffPanelSection.classList.remove('hidden');
+            // hide customer account section for staff
+            if (customerAccountSection) customerAccountSection.classList.add('hidden');
+            if (myOrdersBtn) myOrdersBtn.style.display = 'none';
+            if (furnitureSection) furnitureSection.classList.add('hidden');
+            if (cartIcon) cartIcon.classList.add('hidden');
+            if (furnitureGrid) furnitureGrid.innerHTML = '';
+            // hide about/contact sections for staff but show hero area
+            if (aboutSection) aboutSection.classList.add('hidden');
+            if (visionMissionSection) visionMissionSection.classList.add('hidden');
+            if (contactSection) contactSection.classList.add('hidden');
+            // show hero section but hide hero action buttons for staff
+            if (heroSection) heroSection.classList.remove('hidden');
+            if (heroButtons) heroButtons.style.display = 'none';
+            // hide navigation links and track order button (but keep home/menu hidden)
+            if (homeLink) homeLink.style.display = 'none';
+            if (furnitureLink) furnitureLink.style.display = 'none';
+            if (publicNavLinks) publicNavLinks.forEach(link => link.style.display = 'none');
+            if (trackOrderBtn) trackOrderBtn.classList.add('hidden');
+            // give the staff panel a subtle gradient background while staff is active
+            if (staffPanelSection) staffPanelSection.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
+        } else {
+            adminPanelSection.classList.add('hidden');
+            staffPanelSection.classList.add('hidden');
+            // show customer-specific account UI
+            if (customerAccountSection) customerAccountSection.classList.remove('hidden');
+            if (myOrdersBtn) myOrdersBtn.style.display = '';
+            if (furnitureSection) furnitureSection.classList.remove('hidden');
+            if (cartIcon) cartIcon.classList.remove('hidden');
+            // show about/vision/contact sections for customers
+            if (aboutSection) aboutSection.classList.remove('hidden');
+            if (visionMissionSection) visionMissionSection.classList.remove('hidden');
+            if (contactSection) contactSection.classList.remove('hidden');
+            // show hero section and nav links
+            if (heroSection) heroSection.classList.remove('hidden');
+            if (heroButtons) heroButtons.style.display = '';
+            if (publicNavLinks) publicNavLinks.forEach(link => link.style.display = '');
+            if (homeLink) homeLink.style.display = '';
+            if (furnitureLink) furnitureLink.style.display = '';
+            // reset staff panel background to default for non-staff
+            if (staffPanelSection) staffPanelSection.style.background = '';
+            // re-render furniture so the customer can order
+            renderFurniture();
+        }
+    } else {
+        logoutBtn.classList.add('hidden');
+        userInfo.classList.add('hidden');
+        adminPanelSection.classList.add('hidden');
+        staffPanelSection.classList.add('hidden');
+        if (customerAccountSection) customerAccountSection.classList.add('hidden');
+        if (myOrdersBtn) myOrdersBtn.style.display = 'none';
+        if (furnitureSection) furnitureSection.classList.remove('hidden');
+        if (cartIcon) cartIcon.classList.remove('hidden');
+        if (aboutSection) aboutSection.classList.remove('hidden');
+        if (visionMissionSection) visionMissionSection.classList.remove('hidden');
+        if (contactSection) contactSection.classList.remove('hidden');
+        if (heroSection) heroSection.classList.remove('hidden');
+        if (heroButtons) heroButtons.style.display = '';
+        if (publicNavLinks) publicNavLinks.forEach(link => link.style.display = '');
+        if (homeLink) homeLink.style.display = '';
+        if (furnitureLink) furnitureLink.style.display = '';
+        if (staffPanelSection) staffPanelSection.style.background = '';
+        renderFurniture();
+    }
+}
+
+// Dashboard functions
+function updateDashboardStats() {
+    // Admin dashboard stats
+    if (adminTotalUsers) {
+        adminTotalUsers.textContent = users.length;
+    }
+    if (adminTotalOrders) {
+        adminTotalOrders.textContent = orders.length;
+    }
+    if (adminTotalRevenue) {
+        const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+        adminTotalRevenue.textContent = `₱${totalRevenue.toFixed(2)}`;
+    }
+    if (adminPendingOrders) {
+        const pendingOrders = orders.filter(order => order.status === 'pending').length;
+        adminPendingOrders.textContent = pendingOrders;
+    }
+
+    // Staff dashboard stats
+    if (staffTodayOrders) {
+        const today = new Date().toLocaleDateString();
+        const todayOrders = orders.filter(order => order.date === today).length;
+        staffTodayOrders.textContent = todayOrders;
+    }
+    if (staffPendingOrders) {
+        const pendingOrders = orders.filter(order => order.status === 'pending').length;
+        staffPendingOrders.textContent = pendingOrders;
+    }
+    if (staffPreparingOrders) {
+        const preparingOrders = orders.filter(order => order.status === 'preparing').length;
+        staffPreparingOrders.textContent = preparingOrders;
+    }
+    if (staffReadyOrders) {
+        const readyOrders = orders.filter(order => order.status === 'ready').length;
+        staffReadyOrders.textContent = readyOrders;
+    }
+}
+
+// Admin panel functions
+function setupAdminTabs() {
+    const tabs = document.querySelectorAll('.admin-tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove active class from all tabs
+            tabs.forEach(t => t.classList.remove('active'));
+            // Hide all content
+            document.querySelectorAll('.admin-content').forEach(c => c.classList.remove('active'));
+           
+            // Activate clicked tab
+            this.classList.add('active');
+            const tabId = this.getAttribute('data-tab');
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+        });
+    });
+}
+
+function renderUsersTable() {
+    const tbody = document.getElementById('users-table-body');
+    tbody.innerHTML = users.map(user => `
+        <tr>
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>
+                <span class="user-role ${user.role}">${user.role}</span>
+            </td>
+            <td>${user.registered}</td>
+            <td>
+                <button class="btn btn-secondary edit-user-btn" data-id="${user.id}">Edit</button>
+                <button class="btn btn-admin change-role-btn" data-id="${user.id}">Change Role</button>
+            </td>
+        </tr>
+    `).join('');
+
+    // Wire up Edit buttons
+    document.querySelectorAll('.edit-user-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const userId = parseInt(this.getAttribute('data-id'));
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            const newName = prompt('Edit name for user:', user.name);
+            if (newName !== null && newName.trim() !== '') {
+                user.name = newName.trim();
+            }
+
+            const newEmail = prompt('Edit email for user:', user.email);
+            if (newEmail !== null && newEmail.trim() !== '') {
+                user.email = newEmail.trim();
+            }
+
+            renderUsersTable();
+            showNotification('User updated');
+            saveDataToLocalStorage();
+        });
+    });
+
+    // Wire up Change Role buttons
+    document.querySelectorAll('.change-role-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const userId = parseInt(this.getAttribute('data-id'));
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            const newRole = prompt(`Change role for ${user.name} (customer, staff, admin):`, user.role);
+            if (!newRole) return;
+            const normalized = newRole.trim().toLowerCase();
+            const validRoles = ['customer', 'staff', 'admin'];
+            if (!validRoles.includes(normalized)) {
+                alert('Invalid role. Valid roles: customer, staff, admin');
+                return;
+            }
+
+            user.role = normalized;
+            // If this changed the currently-logged-in user, update UI
+            if (currentUser && currentUser.email === user.email) {
+                currentUser.role = normalized;
+            }
+
+            updateAuthUI();
+            renderUsersTable();
+            showNotification(`Role updated for ${user.name} → ${normalized}`);
+            saveDataToLocalStorage();
+        });
+    });
+}
+
+function renderProductsTable() {
+    const tbody = document.getElementById('products-table-body');
+    tbody.innerHTML = furniture.map(item => `
+        <tr>
+            <td>${item.name}</td>
+            <td>₱${item.price.toFixed(2)}</td>
+            <td>${item.category}</td>
+            <td>
+                <span class="status-badge ${item.available ? 'status-completed' : 'status-pending'}">
+                    ${item.available ? 'Available' : 'Unavailable'}
+                </span>
+            </td>
+            <td>
+                <button class="btn btn-secondary product-edit-btn" data-id="${item.id}">Edit</button>
+                <button class="btn ${item.available ? 'btn-admin' : 'btn-secondary'} product-toggle-btn" data-id="${item.id}">
+                    ${item.available ? 'Disable' : 'Enable'}
+                </button>
+            </td>
+        </tr>
+    `).join('');
+   
+    // Wire up Edit buttons
+    document.querySelectorAll('.product-edit-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const itemId = parseInt(this.getAttribute('data-id'));
+            const item = furniture.find(c => c.id === itemId);
+            if (!item) return;
+
+            const newName = prompt('Edit product name:', item.name);
+            if (newName !== null && newName.trim() !== '') {
+                item.name = newName.trim();
+            }
+
+            const newPrice = prompt('Edit product price:', item.price);
+            if (newPrice !== null && !isNaN(parseFloat(newPrice))) {
+                item.price = parseFloat(newPrice);
+            }
+
+            renderProductsTable();
+            renderFurniture();
+            showNotification('Product updated');
+            saveDataToLocalStorage();
+        });
+    });
+
+    // Wire up Toggle buttons
+    document.querySelectorAll('.product-toggle-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const itemId = parseInt(this.getAttribute('data-id'));
+            const item = furniture.find(c => c.id === itemId);
+            if (!item) return;
+
+            item.available = !item.available;
+            renderProductsTable();
+            renderFurniture();
+            showNotification(`${item.name} is now ${item.available ? 'Available' : 'Unavailable'}`);
+            saveDataToLocalStorage();
+        });
+    });
+}
+
+function renderOrdersTable() {
+    const tbody = document.getElementById('orders-table-body');
+    tbody.innerHTML = orders.map(order => `
+        <tr>
+            <td>#${order.id}</td>
+            <td>${order.customerName}</td>
+            <td>${order.items.map(item => `${item.quantity}x ${item.name}`).join(', ')}</td>
+            <td>₱${order.total.toFixed(2)}</td>
+            <td>
+                <span class="status-badge status-${order.status}">${order.status}</span>
+            </td>
+            <td>${order.date}</td>
+            <td>
+                <button class="btn btn-secondary view-order-btn" data-id="${order.id}">View Details</button>
+                <button class="btn btn-admin update-status-btn" data-id="${order.id}">Update Status</button>
+            </td>
+        </tr>
+    `).join('');
+   
+    // Wire up View buttons
+    document.querySelectorAll('.view-order-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const orderId = parseInt(this.getAttribute('data-id'));
+            const order = orders.find(o => o.id === orderId);
+            if (!order) return;
+           
+            let itemsList = order.items.map(item =>
+                `${item.quantity}x ${item.name} - ₱${(item.price * item.quantity).toFixed(2)}`
+            ).join('\n');
+           
+            alert(`Order #${order.id}\nCustomer: ${order.customerName}\nPhone: ${order.customerPhone}\nAddress: ${order.deliveryAddress}\nItems:\n${itemsList}\nTotal: ₱${order.total.toFixed(2)}\nStatus: ${order.status}\nPayment: ${order.paymentMethod}`);
+        });
+    });
+   
+    // Wire up Update Status buttons
+    document.querySelectorAll('.update-status-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const orderId = parseInt(this.getAttribute('data-id'));
+            const order = orders.find(o => o.id === orderId);
+            if (!order) return;
+
+            const newStatus = prompt(`Update status for order #${orderId} (pending, confirmed, preparing, ready, completed):`, order.status);
+            if (!newStatus) return;
+           
+            const validStatuses = ['pending', 'confirmed', 'preparing', 'ready', 'completed'];
+            if (!validStatuses.includes(newStatus)) {
+                alert('Invalid status. Valid statuses: pending, confirmed, preparing, ready, completed');
+                return;
+            }
+
+            order.status = newStatus;
+
+            // Update user orders if exists
+            if (userOrders[order.customerEmail]) {
+                const userOrder = userOrders[order.customerEmail].find(o => o.id === orderId);
+                if (userOrder) {
+                    userOrder.status = newStatus;
+                }
+            }
+            
+            renderOrdersTable();
+            renderStaffOrdersTable();
+            updateDashboardStats();
+            showNotification(`Order #${orderId} status updated to ${newStatus}`);
+            saveDataToLocalStorage();
+        });
+    });
+}
+
+function renderCustomersTable() {
+    const tbody = document.getElementById('customers-table-body');
+    
+    // Get unique customers from orders
+    const customerEmails = [...new Set(orders.map(order => order.customerEmail))];
+    const customers = customerEmails.map(email => {
+        const customerOrders = orders.filter(order => order.customerEmail === email);
+        const totalSpent = customerOrders.reduce((sum, order) => sum + order.total, 0);
+        const lastOrder = customerOrders.length > 0 ? 
+            customerOrders.sort((a, b) => new Date(b.date) - new Date(a.date))[0] : null;
+        
+        return {
+            name: customerOrders[0]?.customerName || 'Unknown',
+            email: email,
+            phone: customerOrders[0]?.customerPhone || 'N/A',
+            totalOrders: customerOrders.length,
+            totalSpent: totalSpent,
+            lastOrder: lastOrder?.date || 'No orders'
+        };
+    });
+    
+    tbody.innerHTML = customers.map(customer => `
+        <tr>
+            <td>${customer.name}</td>
+            <td>${customer.email}</td>
+            <td>${customer.phone}</td>
+            <td>${customer.totalOrders}</td>
+            <td>₱${customer.totalSpent.toFixed(2)}</td>
+            <td>${customer.lastOrder}</td>
+            <td>
+                <button class="btn btn-secondary view-customer-btn" data-email="${customer.email}">View Orders</button>
+            </td>
+        </tr>
+    `).join('');
+    
+    // Wire up View Customer buttons
+    document.querySelectorAll('.view-customer-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const customerEmail = this.getAttribute('data-email');
+            const customerOrders = orders.filter(order => order.customerEmail === customerEmail);
+            
+            if (customerOrders.length === 0) {
+                alert('No orders found for this customer.');
+                return;
+            }
+            
+            let ordersList = customerOrders.map(order => 
+                `Order #${order.id} - ${order.date} - ₱${order.total.toFixed(2)} - ${order.status}`
+            ).join('\n');
+            
+            alert(`Orders for ${customerOrders[0].customerName} (${customerEmail}):\n\n${ordersList}`);
+        });
+    });
+}
+
+function renderStaffOrdersTable() {
+    const tbody = document.getElementById('staff-orders-table-body');
+    // Use a select control for staff so they can change status via dropdown
+    tbody.innerHTML = orders.map(order => `
+        <tr>
+            <td>#${order.id}</td>
+            <td>${order.customerName}</td>
+            <td>${order.items.map(item => `${item.quantity}x ${item.name}`).join(', ')}</td>
+            <td>₱${order.total.toFixed(2)}</td>
+            <td>
+                <span class="status-badge status-${order.status}">${order.status}</span>
+            </td>
+            <td>${order.date}</td>
+                    <td>
+                        <button class="btn btn-secondary view-order-btn" data-id="${order.id}">View Details</button>
+                        <button class="btn btn-staff update-status-btn" data-id="${order.id}">Update Status</button>
+                    </td>
+        </tr>
+    `).join('');
+
+    // Wire up View buttons
+    document.querySelectorAll('#staff-orders-table-body .view-order-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const orderId = parseInt(this.getAttribute('data-id'));
+            const order = orders.find(o => o.id === orderId);
+            if (!order) return;
+
+            let itemsList = order.items.map(item =>
+                `${item.quantity}x ${item.name} - ₱${(item.price * item.quantity).toFixed(2)}`
+            ).join('\n');
+
+            alert(`Order #${order.id}\nCustomer: ${order.customerName}\nPhone: ${order.customerPhone}\nAddress: ${order.deliveryAddress}\nItems:\n${itemsList}\nTotal: ₱${order.total.toFixed(2)}\nStatus: ${order.status}\nPayment: ${order.paymentMethod}`);
+        });
+    });
+
+    // Wire up Update Status buttons (also available for staff)
+    document.querySelectorAll('#staff-orders-table-body .update-status-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const orderId = parseInt(this.getAttribute('data-id'));
+            const order = orders.find(o => o.id === orderId);
+            if (!order) return;
+
+            const newStatus = prompt(`Update status for order #${orderId} (pending, confirmed, preparing, ready):`, order.status);
+            if (!newStatus) return;
+
+            const validStatuses = ['pending', 'confirmed', 'preparing', 'ready'];
+            if (!validStatuses.includes(newStatus)) {
+                alert('Invalid status. Staff can only update to: pending, confirmed, preparing, ready');
+                return;
+            }
+
+            order.status = newStatus;
+
+            // Update user orders if exists
+            if (userOrders[order.customerEmail]) {
+                const userOrder = userOrders[order.customerEmail].find(o => o.id === orderId);
+                if (userOrder) userOrder.status = newStatus;
+            }
+
+            renderOrdersTable();
+            renderStaffOrdersTable();
+            updateDashboardStats();
+            showNotification(`Order #${orderId} status updated to ${newStatus}`);
+            saveDataToLocalStorage();
+        });
+    });
+}
+
+function renderOrderHistory() {
+    const tbody = document.getElementById('order-history-table-body');
+    const noOrdersMsg = document.getElementById('no-orders-msg');
+    const accountNameEl = document.getElementById('account-user-name');
+    const accountEmailEl = document.getElementById('account-user-email');
+
+    if (!tbody) return;
+
+    // Update account header info
+    if (accountNameEl) accountNameEl.textContent = currentUser ? currentUser.name : 'Guest';
+    if (accountEmailEl) accountEmailEl.textContent = currentUser ? currentUser.email : '';
+
+    if (!currentUser) {
+        tbody.innerHTML = '';
+        if (noOrdersMsg) {
+            noOrdersMsg.style.display = '';
+            noOrdersMsg.textContent = 'Please login to see your orders.';
+        }
+        return;
+    }
+
+    // Filter orders that belong to current user.
+    const filtered = orders.filter(o => {
+        // Try matching common properties that may exist on order objects
+        return (
+            (o.userEmail && currentUser.email && o.userEmail === currentUser.email) ||
+            (o.customerEmail && currentUser.email && o.customerEmail === currentUser.email) ||
+            (o.userId && currentUser.id && o.userId === currentUser.id) ||
+            (o.customerName && currentUser.name && o.customerName === currentUser.name)
+        );
+    });
+
+    if (!filtered || filtered.length === 0) {
+        tbody.innerHTML = '';
+        if (noOrdersMsg) {
+            noOrdersMsg.style.display = '';
+            noOrdersMsg.textContent = 'You have no orders yet.';
+        }
+        return;
+    }
+
+    if (noOrdersMsg) noOrdersMsg.style.display = 'none';
+
+    tbody.innerHTML = filtered.map(order => {
+        // items summary
+        const itemSummary = (order.items || []).map(i => `${i.name} x${i.quantity || i.qty || 1}`).join(', ');
+        const date = order.date || order.createdAt || order.orderDate || '';
+        const total = typeof order.total === 'number' ? `₱${order.total.toFixed(2)}` : (order.total || '₱0.00');
+
+        return `
+            <tr>
+                <td>#${order.id || order.orderId || ''}</td>
+                <td>${date}</td>
+                <td>${itemSummary}</td>
+                <td>${total}</td>
+                <td>${order.status || ''}</td>
+                <td>
+                    <button class="btn btn-secondary view-order-btn" data-id="${order.id || order.orderId || ''}">View</button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+
+    // attach handlers for view buttons
+    tbody.querySelectorAll('.view-order-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const order = filtered.find(o => (String(o.id) === String(id) || String(o.orderId) === String(id)));
+            if (!order) return showNotification('Order not found', 'error');
+
+            const itemsList = (order.items || []).map(i => `${i.name} x${i.quantity || i.qty || 1}`).join('\n');
+            alert(`Order #${order.id || order.orderId}\nCustomer: ${order.customerName || order.customer || ''}\nPhone: ${order.customerPhone || ''}\nAddress: ${order.deliveryAddress || ''}\nItems:\n${itemsList}\nTotal: ${typeof order.total === 'number' ? `₱${order.total.toFixed(2)}` : (order.total || '')}\nStatus: ${order.status || ''}\nPayment: ${order.paymentMethod || ''}`);
+        });
+    });
+}
+
+// Payment functions
+function openPaymentModal() {
+    if (!currentUser) {
+        closeModal(paymentModal);
+        showNotification('Please login to place an order', 'error');
+        return;
+    }
+
+    if (cart.length === 0) {
+        showNotification('Your cart is empty', 'error');
+        return;
+    }
+
+    // Update order summary
+    const orderItemsList = document.getElementById('order-items-list');
+    orderItemsList.innerHTML = cart.map(item => `
+        <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+            <span>${item.quantity}x ${item.name}</span>
+            <span>₱${(item.price * item.quantity).toFixed(2)}</span>
+        </div>
+    `).join('');
+
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    document.getElementById('payment-total-amount').textContent = `₱${(total + 250).toFixed(2)}`;
+
+    // Pre-fill customer details if available
+    if (currentUser) {
+        document.getElementById('customer-name').value = currentUser.name;
+    }
+
+    // Ensure the correct payment details block is visible for the currently selected method
+    const checked = document.querySelector('input[name="payment-method"]:checked');
+    if (checked) updatePaymentDetails(checked.value);
+
+    openModal(paymentModal);
+}
+
+function updatePaymentDetails(method) {
+    // Hide all payment details
+    document.querySelectorAll('.payment-details').forEach(detail => {
+        detail.classList.remove('active');
+    });
+
+    // Map method values to actual detail element IDs
+    let detailId = '';
+    if (!method) method = 'gcash';
+    switch (method) {
+        case 'credit_card':
+            detailId = 'credit-card-details';
+            break;
+        case 'cash_on_delivery':
+            detailId = 'cod-details';
+            break;
+        default:
+            // default mapping: replace underscores with hyphens (e.g., gcash -> gcash-details)
+            detailId = `${method}-details`.replace(/_/g, '-');
+    }
+
+    const selectedDetail = document.getElementById(detailId);
+    if (selectedDetail) {
+        selectedDetail.classList.add('active');
+    }
+}
+
+function processPayment(e) {
+    e.preventDefault();
+   
+    if (!currentUser) {
+        showNotification('Please login to place an order', 'error');
+        return;
+    }
+
+    if (cart.length === 0) {
+        showNotification('Your cart is empty', 'error');
+        return;
+    }
+
+    const customerName = document.getElementById('customer-name').value;
+    const customerPhone = document.getElementById('customer-phone').value;
+    const deliveryAddress = document.getElementById('delivery-address').value;
+    const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+   
+    // Validate required fields
+    if (!customerName || !customerPhone || !deliveryAddress) {
+        showNotification('Please fill in all required fields', 'error');
+        return;
+    }
+
+    // Create new order
+    const newOrder = {
+        id: nextOrderId++,
+        customerName: customerName,
+        customerEmail: currentUser.email,
+        customerPhone: customerPhone,
+        deliveryAddress: deliveryAddress,
+        items: [...cart],
+        subtotal: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+        shipping: 250,
+        total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) + 250,
+        status: 'pending',
+        paymentMethod: paymentMethod,
+        date: new Date().toLocaleDateString(),
+        orderTime: new Date().toLocaleTimeString()
+    };
+
+    // Add to orders
+    orders.unshift(newOrder);
+
+    // Save user's order for tracking
+    if (!userOrders[currentUser.email]) {
+        userOrders[currentUser.email] = [];
+    }
+    userOrders[currentUser.email].push(newOrder);
+
+    // Clear cart
+    cart = [];
+    updateCartUI();
+
+    // Close modals
+    closeModal(paymentModal);
+    toggleCart();
+
+    // Show confirmation
+    document.getElementById('confirmed-order-id').textContent = newOrder.id;
+    document.getElementById('confirmed-order-subtotal').textContent = `₱${newOrder.subtotal.toFixed(2)}`;
+    document.getElementById('confirmed-order-total').textContent = `₱${newOrder.total.toFixed(2)}`;
+    document.getElementById('confirmed-payment-method').textContent = formatPaymentMethod(newOrder.paymentMethod);
+    openModal(orderConfirmationModal);
+
+    // Update orders tables
+    renderOrdersTable();
+    renderStaffOrdersTable();
+    renderCustomersTable();
+    updateDashboardStats();
+
+    // Save data
+    saveDataToLocalStorage();
+
+    showNotification(`Order #${newOrder.id} placed successfully!`, 'success');
+}
+
+function formatPaymentMethod(method) {
+    const methods = {
+        'gcash': 'GCash',
+        'credit_card': 'Credit Card',
+        'cash_on_delivery': 'Cash on Delivery'
+    };
+    return methods[method] || method;
+}
+
+function closeOrderConfirmation() {
+    closeModal(orderConfirmationModal);
+    paymentForm.reset();
+}
+
+// Modal functions
+function openModal(modal) {
+    modal.classList.add('active');
+    overlay.classList.add('active');
+}
+
+function closeModal(modal) {
+    modal.classList.remove('active');
+    overlay.classList.remove('active');
+}
+
+function closeAllModals() {
+    closeModal(paymentModal);
+    closeModal(orderConfirmationModal);
+    cartSidebar.classList.remove('active');
+    overlay.classList.remove('active');
+}
+
+// Notification function
+function showNotification(message, type = 'success') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: ${type === 'error' ? '#ff5252' : '#4caf50'};
+        color: white;
+        padding: 12px 20px;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        z-index: 10000;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 0.3s ease;
+    `;
+   
+    document.body.appendChild(notification);
+   
+    // Animate in
+    setTimeout(() => {
+        notification.style.transform = 'translateY(0)';
+        notification.style.opacity = '1';
+    }, 10);
+   
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.transform = 'translateY(100px)';
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+// Data persistence
+function saveDataToLocalStorage() {
+    try {
+        localStorage.setItem('wc_furniture', JSON.stringify(furniture));
+        localStorage.setItem('wc_orders', JSON.stringify(orders));
+        localStorage.setItem('wc_userOrders', JSON.stringify(userOrders));
+        localStorage.setItem('wc_users', JSON.stringify(users));
+        localStorage.setItem('wc_nextOrderId', nextOrderId.toString());
+        localStorage.setItem('wc_cart', JSON.stringify(cart));
+    } catch (e) {
+        console.warn('Failed to save data to localStorage:', e);
+    }
+}
+
+function loadDataFromLocalStorage() {
+    try {
+        const savedFurniture = localStorage.getItem('wc_furniture');
+        const savedOrders = localStorage.getItem('wc_orders');
+        const savedUserOrders = localStorage.getItem('wc_userOrders');
+        const savedUsers = localStorage.getItem('wc_users');
+        const savedNextOrderId = localStorage.getItem('wc_nextOrderId');
+        const savedCart = localStorage.getItem('wc_cart');
+       
+        if (savedFurniture) {
+            const parsed = JSON.parse(savedFurniture);
+            // Merge by id but do not overwrite existing file values.
+            // This avoids reintroducing removed items that existed in saved data.
+            parsed.forEach(savedItem => {
+                const target = furniture.find(f => f.id === savedItem.id);
+                if (target) {
+                    Object.keys(savedItem).forEach(key => {
+                        if (target[key] === undefined || target[key] === null) {
+                            target[key] = savedItem[key];
+                        }
+                    });
+                }
+            });
+        }
+       
+        if (savedOrders) orders = JSON.parse(savedOrders);
+        if (savedUserOrders) userOrders = JSON.parse(savedUserOrders);
+        if (savedUsers) {
+            const parsedUsers = JSON.parse(savedUsers);
+            // Merge with default users to ensure we have all required fields
+            users.forEach((user, index) => {
+                if (parsedUsers[index]) {
+                    Object.assign(user, parsedUsers[index]);
+                }
+            });
+            // Add any additional users
+            if (parsedUsers.length > users.length) {
+                users.push(...parsedUsers.slice(users.length));
+            }
+        }
+        if (savedNextOrderId) nextOrderId = parseInt(savedNextOrderId);
+        if (savedCart) cart = JSON.parse(savedCart);
+    } catch (e) {
+        console.warn('Failed to load data from localStorage:', e);
+    }
+}
+
+function showTerms() {
+    alert(`CasaNova Furni Terms and Conditions:
+   
+1. All orders must be paid in full before delivery
+2. Delivery within 3-5 business days
+3. Cancellations must be made within 24 hours of ordering
+4. Prices are subject to change without notice
+5. We accept returns within 14 days for defective products
+   
+By placing an order, you agree to these terms.`);
+}
+
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+       
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+       
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+            window.scrollTo({
+                top: targetElement.offsetTop - 100,
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+
+// Track Order functionality
+const trackModal = document.getElementById('track-modal');
+const trackBtn = document.getElementById('track-order-btn');
+const closeTrack = document.getElementById('close-track');
+const trackForm = document.getElementById('track-form');
+const trackInput = document.getElementById('track-id');
+const trackResult = document.getElementById('track-result');
+const trackStepsContainer = document.getElementById('track-steps');
+const trackProgressBar = document.getElementById('track-progress-bar');
+const trackMeta = document.getElementById('track-meta');
+const clearTrack = document.getElementById('clear-track');
+
+if (trackBtn) trackBtn.addEventListener('click', () => openModal(trackModal));
+if (closeTrack) closeTrack.addEventListener('click', () => closeModal(trackModal));
+if (clearTrack) clearTrack.addEventListener('click', function() {
+    trackInput.value = '';
+    trackResult.style.display = 'none';
+    trackStepsContainer.innerHTML = '';
+    trackProgressBar.style.width = '0%';
+    trackMeta.textContent = '';
+});
+
+trackForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const raw = trackInput.value.trim();
+    if (!raw) {
+        showNotification('Please enter an Order ID', 'error');
+        return;
+    }
+
+    // Normalize ID (allow #1001 or 1001)
+    const id = parseInt(raw.replace('#', ''), 10);
+    if (isNaN(id)) {
+        alert('Order not found. Please check your ID.');
+        return;
+    }
+
+    const order = orders.find(o => o.id === id);
+    if (!order) {
+        alert('Order not found. Please check your ID.');
+        return;
+    }
+
+    // Define the visible steps
+    const steps = [
+        { key: 'confirmed', label: 'Order Confirmed', icon: '✅' },
+        { key: 'preparing', label: 'Being Prepared', icon: '📦' },
+        { key: 'shipped', label: 'Shipped', icon: '🚚' },
+        { key: 'ready', label: 'Out for Delivery', icon: '🏍️' },
+        { key: 'completed', label: 'Delivered', icon: '🎉' }
+    ];
+
+    // Map existing order.status to an index
+    const statusIndexMap = { 'pending': 0, 'confirmed': 0, 'preparing': 1, 'ready': 3, 'completed': 4 };
+    // fallback: if status exactly matches one of the step keys, use that index
+    let currentIndex = statusIndexMap[order.status] !== undefined ? statusIndexMap[order.status] : steps.findIndex(s => s.key === order.status);
+    if (currentIndex === -1) currentIndex = 0;
+
+    // Render steps
+    trackStepsContainer.innerHTML = steps.map((s, i) => `
+        <div class="track-step ${i < currentIndex ? 'completed' : i === currentIndex ? 'current' : ''}">
+            <div class="icon">${s.icon}</div>
+            <div class="label">${s.label}</div>
+        </div>
+    `).join('');
+
+    // Update progress bar (percentage based on steps)
+    const percent = Math.round((currentIndex) / (steps.length - 1) * 100);
+    trackProgressBar.style.width = percent + '%';
+
+    // Estimated delivery (simple heuristic)
+    let addDays = 5;
+    if (order.status === 'completed') addDays = 0;
+    else if (order.status === 'ready') addDays = 1;
+    else if (order.status === 'preparing') addDays = 3;
+    else if (order.status === 'confirmed') addDays = 4;
+
+    const estDate = new Date();
+    estDate.setDate(estDate.getDate() + addDays);
+
+    trackMeta.innerHTML = `
+        <strong>Current status:</strong> ${steps[currentIndex].label}<br>
+        <strong>Estimated Delivery Date:</strong> ${estDate.toLocaleDateString()}
+    `;
+
+    trackResult.style.display = 'block';
+    // Ensure modal is open so user can see result
+    openModal(trackModal);
+});
+
+// Sidebar toggle behaviour: clicking the floating button collapses/expands the left sidebar
+(function() {
+    const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+
+    function applySidebarState() {
+        const collapsed = localStorage.getItem('sidebarCollapsed') === '1';
+        if (collapsed) document.body.classList.add('sidebar-collapsed');
+        else document.body.classList.remove('sidebar-collapsed');
+    }
+
+    if (sidebarToggleBtn) {
+        sidebarToggleBtn.addEventListener('click', function() {
+            const collapsed = document.body.classList.toggle('sidebar-collapsed');
+            try { localStorage.setItem('sidebarCollapsed', collapsed ? '1' : '0'); } catch (e) {}
+        });
+    }
+
+    // Apply persisted state on load
+    applySidebarState();
+})();
+
+    </script>
+</body>
+</html>
